@@ -1,14 +1,54 @@
-# 1st-class-task-scratch
-project link(it6)
+IT06
+Description:
+-Create a batch quality-control inspection program.
+-Generate a batch of 10 random parts.
+-Use a loop to inspect each part.
+-Apply if/else conditions to classify each part.
+-Create two counter variables:
+  - Accepted parts
+  - Rejected parts
+-Update the respective counters after each inspection.
+-Display the final batch report:
+- Total parts inspected: 10
+- Number of accepted parts
+- Number of rejected parts
+-Ensure the total accepted and rejected parts equals 10.
+PROJECT LINK
 https://scratch.mit.edu/projects/1364199243
 
-project link(it8)
+IT08
+Description:
+-Create a quality inspection program for manufactured parts.
+-Use a random or user-input value as the part diameter.
+-Define the minimum and maximum acceptable diameter.
+-Use an if/else condition to check the diameter.
+-Display ACCEPT if the diameter is within the specified limits.
+-Display REJECT if the diameter is outside the limits.
+-Simulate the inspection process using Scratch blocks.
+PROJECT LINK
 https://scratch.mit.edu/projects/1364197542
 
-project link(it10)
+IT10
+Description:
+-Create a simulation of an automatic stamping machine.
+-Define three operations: Move, Stamp and Return.
+-Use a repeat block to execute the stamping cycle.
+-Create a counter variable to track the number of parts produced.
+-Display the counter value during production.
+-Ensure the machine completes the required cycles automatically.
+-Identify the final counter value before running the program.
+PROJECT LINK
 https://scratch.mit.edu/projects/1364195904
 
-project link(it12)
+IT12
+Description:
+-Create a sprite animation representing a production process.
+-Rebuild the chai route sheet (Job 01).
+-Use at least 6 blocks in sequence.
+-Include motion, speech and wait commands.
+-Arrange the blocks in a proper sequence.
+-Use the green flag to start the animation.
+-Ensure the complete animation runs automatically without manual help.
+PROJECT LINK
 https://scratch.mit.edu/projects/1364193319
-
 
