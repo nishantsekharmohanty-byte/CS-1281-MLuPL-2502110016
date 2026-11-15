@@ -1,65 +1,51 @@
-
 import re
 
-# Regex pattern:
-# 1. Work order must follow WO + digits
-# 2. Machine name is the second field
-# 3. Status is the third field
-# 4. Allows any spacing around | separators
+# Old split-based parsing:
+# parts = line.split(",")
 
+# New regex-based parsing
 pattern = re.compile(
-    r"^\s*(WO\d+)\s*\|\s*([^|]+?)\s*\|\s*(.+?)\s*$"
+    r"^\s*(PART-\d{3})\s*,\s*(\d+)\s*,\s*([A-Za-z]+)\s*$"
 )
 
-def parse_record(line):
-    # OLD VERSION: split-based parser
-    # parts = [part.strip() for part in line.split("|")]
-    # if len(parts) != 3:
-    #     return None
-    # return parts[0], parts[1], parts[2]
 
-    # NEW VERSION: Regex parser
-    match = pattern.fullmatch(line)
+def extract_record(line):
 
-    if match:
-        work_order, machine, status = match.groups()
+    result = pattern.search(line)
 
-        if machine.strip() and status.strip():
-            return work_order, machine.strip(), status.strip()
+    if result is None:
+        raise ValueError("Record format is incorrect")
 
-    return None
+    part, quantity, material = result.groups()
+
+    return part, int(quantity), material
 
 
-# Read actual input from file
-input_file = "data/shift_log.txt"
+records = [
+    "PART-201,10,Steel",
+    " PART-202 , 20 , Iron ",
+    "PART-203,15,Copper",
+    "PART-204,30,Wood",
+    "INVALID,10,Glass",
+    "PART-205,abc,Plastic",
+    "PART-206,-5,Iron",
+    "PART-207,25,Aluminium"
+]
 
-valid_records = []
-rejected_records = []
+print("REGEX PARSER OUTPUT")
+print("---------------------------")
 
-with open(input_file, "r") as file:
-    for line_number, line in enumerate(file, start=1):
-        result = parse_record(line.strip())
+for line in records:
 
-        if result:
-            valid_records.append(result)
-        else:
-            rejected_records.append((line_number, line.strip()))
+    try:
+        part, quantity, material = extract_record(line)
 
-# Display results
-print("REGEX PARSER RESULTS")
-print("--------------------")
+        if quantity <= 0:
+            raise ValueError("Quantity must be positive")
 
-print("Valid records:", len(valid_records))
-print("Rejected records:", len(rejected_records))
+        print("Accepted:", part, quantity, material)
 
-print("\nAccepted records:")
-for record in valid_records:
-    print(record)
+    except ValueError as error:
+        print("Rejected:", line, "-", error)
 
-print("\nRejected records:")
-for record in rejected_records:
-    print(record)
-
-# Test comparison note:
-# Regex parser survived more spacing variations than split().
-# Split parser was simpler but did not validate the WO code shape.
+print("\nRegex parsing completed.")
