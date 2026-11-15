@@ -1,31 +1,31 @@
+
 accept = 0
 rework = 0
 scrap = 0
 
-# Batch inspection
 for i in range(10):
-    diameter = float(input(f"Enter diameter of part {i + 1}: "))
+    d = float(input("Enter diameter: "))
 
-    if 9.95 <= diameter <= 10.05:
+    if 9.5 <= d <= 10.5:
         print("ACCEPT")
-        accept += 1
-    elif 9.90 <= diameter < 9.95 or 10.05 < diameter <= 10.10:
+        accept = accept + 1
+
+    elif 9.0 <= d < 9.5 or 10.5 < d <= 11.0:
         print("REWORK")
-        rework += 1
+        rework = rework + 1
+
     else:
         print("SCRAP")
-        scrap += 1
+        scrap = scrap + 1
 
-# Pack only accepted parts into boxes of 4
-box_size = 4
-boxes = accept // box_size
-loose = accept % box_size
+boxes = accept // 4
+loose = accept % 4
 
-# Closing summary
-print("\n----- SHIFT SUMMARY -----")
-print("Accepted Parts :", accept)
-print("Rework Parts   :", rework)
-print("Scrap Parts    :", scrap)
-print("Full Boxes     :", boxes)
-print("Loose Parts    :", loose)
-print("Audit:", boxes, "*", box_size, "+", loose, "==", accept, "->", boxes * box_size + loose == accept)
+print("\nEND OF SHIFT REPORT")
+
+print("Accepted parts:", accept)
+print("Rework parts:", rework)
+print("Scrap parts:", scrap)
+
+print("Full boxes:", boxes)
+print("Loose accepted parts:", loose)
