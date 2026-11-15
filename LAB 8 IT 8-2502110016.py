@@ -1,40 +1,40 @@
-id="q7w4az"
-class SpecViolation(Exception):
+# Custom exception handling
+
+class MachineError(Exception):
     pass
 
 
-class Machine:
-    def __init__(self, name, limit):
-        self.name = name
-        self.limit = limit
-        self.parts = 0
+def operate_machine(part, quantity):
 
-    def operate(self, speed):
-        if speed < 0 or speed > self.limit:
-            raise SpecViolation(
-                f"{self.name}: speed {speed} is outside limit {self.limit}"
-            )
+    if not part.startswith("PART-"):
+        raise MachineError("Invalid part number")
 
-        self.parts += 1
-        return f"{self.name} processed job"
+    if quantity < 1:
+        raise MachineError("Insufficient quantity")
+
+    print("Machine accepted:", part)
 
 
-machines = [
-    Machine("Lathe", 100),
-    Machine("Drill", 80),
-    Machine("Mill", 120)
-]
+def main():
 
-jobs = [50, 90, 150, 60, 70, 110, 40]
+    work_orders = [
+        ("PART-201", 20),
+        ("PART-202", 15),
+        ("WRONG-203", 10),
+        ("PART-204", 0),
+        ("PART-205", 30)
+    ]
 
-for i, speed in enumerate(jobs, 1):
-    machine = machines[(i - 1) % len(machines)]
+    for part, quantity in work_orders:
 
-    try:
-        print(machine.operate(speed))
-    except SpecViolation as error:
-        print("REJECTED:", error)
+        try:
+            operate_machine(part, quantity)
 
-print("\nFleet Report")
-for machine in machines:
-    print(machine.name, ":", machine.parts, "parts")
+        except MachineError as error:
+            print("Machine stopped this job:", error)
+
+    print("\nAll work orders checked.")
+
+
+if __name__ == "__main__":
+    main()
