@@ -1,31 +1,39 @@
+
+# shoptools.py - Version 2
+
 def inspect(dia):
-    if dia < 10:
+    if 10 <= dia < 20:
         return "Small"
-    elif dia < 20:
+    elif 20 <= dia < 30:
         return "Medium"
-    return "Large"
+    elif 30 <= dia <= 40:
+        return "Large"
+    return "Out of Spec"
 
-def lookup(catalogue, code):
-    return catalogue.get(code, 0)
-
-def scrap_codes(catalogue):
-    return {code for code, dia in catalogue.items() if dia < 10 or dia > 20}
 
 def tally(labels):
-    counts = {}
-    for label in labels:
-        counts[label] = counts.get(label, 0) + 1
-    return counts
+    result = {}
+
+    for item in set(labels):
+        result[item] = labels.count(item)
+
+    return result
+
 
 def report(shift, counts):
-    return f"Shift {shift}: {counts}"
+    total = sum(counts.values())
 
-logs = ["P101,12", "P102,25", "P103,8", "P104,15"]
-catalogue = {x.split(",")[0]: float(x.split(",")[1]) for x in logs}
+    return f"{shift} Shift | Produced: {total} | {counts}"
+    
+# main.py - Version 2
 
-labels = [inspect(dia) for dia in catalogue.values()]
-counts = tally(labels)
+import shoptools
 
-print(report("A", counts))
-print("Lookup P999:", lookup(catalogue, "P999"))
-print("Scrap:", scrap_codes(catalogue))
+measurements = [14, 22, 32, 18, 25, 42]
+
+labels = [shoptools.inspect(x) for x in measurements]
+
+counts = shoptools.tally(labels)
+
+print(shoptools.report("B", counts))
+
