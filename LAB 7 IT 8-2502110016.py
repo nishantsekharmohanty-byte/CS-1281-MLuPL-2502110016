@@ -1,39 +1,75 @@
+
+# IT8 - The Machine Runs a Batch
+
 class Machine:
-    def __init__(self, name, limit):
+
+    def __init__(self, name, max_speed):
         self.name = name
-        self.limit = limit
-        self.__speed = 0
-        self.__jobs = 0
-        self.__rejected = 0
+        self.max_speed = max_speed
+        self.parts = 0
+        self.jobs_completed = 0
+        self.rejected_jobs = 0
 
-    def operate(self, speed):
-        if speed < 0 or speed > self.limit:
-            self.__rejected += 1
-            return "Rejected"
-        self.__speed = speed
-        self.__jobs += 1
-        return "Accepted"
+    # Process one job
+    def operate(self, job_id, speed, quantity):
 
+        if speed < 500 or speed > self.max_speed:
+            self.rejected_jobs += 1
+            return f"{job_id}: Rejected - Invalid speed"
+
+        if quantity <= 0:
+            self.rejected_jobs += 1
+            return f"{job_id}: Rejected - Invalid quantity"
+
+        self.parts += quantity
+        self.jobs_completed += 1
+
+        return f"{job_id}: Successfully processed"
+
+    # Return machine status
     def status(self):
         return {
-            "machine": self.name,
-            "jobs": self.__jobs,
-            "rejected": self.__rejected,
-            "last_speed": self.__speed
+            "Machine": self.name,
+            "Completed Jobs": self.jobs_completed,
+            "Rejected Jobs": self.rejected_jobs,
+            "Total Parts": self.parts
         }
 
 
-machine = Machine("Lathe", 100)
-
-logs = [
-    "J01,50", "J02,80", "J03,120", "J04,60", "J05,90",
-    "J06,110", "J07,40", "J08,70", "J09,130", "J10,55"
+# Ten production jobs
+job_logs = [
+    "J01,1200,5",
+    "J02,1800,4",
+    "J03,3200,3",
+    "J04,900,6",
+    "J05,2500,2",
+    "J06,400,5",
+    "J07,1500,8",
+    "J08,2800,3",
+    "J09,2000,4",
+    "J10,3500,2"
 ]
 
-for line in logs:
-    code, speed = line.split(",")
-    result = machine.operate(int(speed))
-    print(code, result)
 
-print("\nShift Report:")
+# Create machine
+machine = Machine("CNC-01", 3000)
+
+# Process batch
+print("BATCH PROCESSING STARTED\n")
+
+for line in job_logs:
+
+    job_id, speed, quantity = line.split(",")
+
+    result = machine.operate(
+        job_id,
+        int(speed),
+        int(quantity)
+    )
+
+    print(result)
+
+
+# Final shift report
+print("\nSHIFT REPORT")
 print(machine.status())
