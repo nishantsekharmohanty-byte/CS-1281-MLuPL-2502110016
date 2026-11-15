@@ -1,27 +1,42 @@
-# Eight hostile inputs from the rig
+# Hostile test inputs
+
 hostile = [
-    "",
-    "ABC",
-    "12,",
-    ",25",
-    "12,25,30",
-    "abc,25",
-    "P101,-5",
-    "P101,999999"
+    " ",
+    "ITEM-101,10,Steel",
+    "PART-ABC,20,Iron",
+    "PART-102,-10,Copper",
+    "PART-103,abc,Wood",
+    "PART-104,0,Plastic",
+    "PART-105,10",
+    "PART-106,15,"
 ]
 
+def check_record(data):
+    fields = data.split(",")
 
-def parser(line):
-    # Current lab05 parser
-    code, dia = line.split(",")
-    return code, float(dia)
+    if len(fields) != 3:
+        raise ValueError("Incorrect number of fields")
+
+    part, amount, material = fields
+
+    if not part.startswith("PART-"):
+        raise ValueError("Wrong part number")
+
+    if not amount.isdigit():
+        raise ValueError("Quantity must be numeric")
+
+    if int(amount) <= 0:
+        raise ValueError("Quantity must be greater than zero")
+
+    if material.strip() == "":
+        raise ValueError("Material cannot be empty")
+
+    return True
 
 
-print("Hostile input test:")
-
-for i, test in enumerate(hostile, 1):
+for number, item in enumerate(hostile, start=1):
     try:
-        result = parser(test)
-        print(f"Test {i}: PASS -> {result}")
-    except Exception as e:
-        print(f"Test {i}: KILLED -> {type(e).__name__}: {e}")
+        check_record(item)
+        print("Test", number, "PASSED")
+    except (ValueError, TypeError) as error:
+        print("Test", number, "FAILED:", error)
