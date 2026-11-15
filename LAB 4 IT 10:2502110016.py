@@ -4,23 +4,24 @@ accept = 0
 rework = 0
 scrap = 0
 
-for i in range(100):
-    diameter = random.uniform(24.90, 25.10)
+for i in range(10):
+    d = round(random.uniform(24.90, 25.10), 2)
 
-    if 24.95 <= diameter <= 25.05:
-        bin = "ACCEPT"
+    print("Diameter:", d)
+
+    if 24.95 <= d <= 25.05:
+        print("ACCEPT")
         accept += 1
-    elif 24.90 <= diameter < 24.95 or 25.05 < diameter <= 25.10:
-        bin = "REWORK"
+
+    elif 24.90 <= d < 24.95 or 25.05 < d <= 25.10:
+        print("REWORK")
         rework += 1
+
     else:
-        bin = "SCRAP"
+        print("SCRAP")
         scrap += 1
 
-    print(f"Diameter: {diameter:.2f} -> {bin}")
-
-print("\n--- SHIFT REPORT ---")
-print(f"ACCEPT: {accept}")
-print(f"REWORK: {rework}")
-print(f"SCRAP: {scrap}")
-print("\nSame code, ten times the work, zero extra effort.")
+print("\nSHIFT REPORT")
+print("Accepted:", accept)
+print("Rework:", rework)
+print("Scrap:", scrap)
