@@ -1,51 +1,81 @@
-hostile = [
-    "",
-    "ABC",
-    "12,",
-    ",25",
-    "12,25,30",
-    "abc,25",
-    "P101,-5",
-    "P101,999999"
+# Parser certification with rejection details
+
+def validate(data):
+    values = data.split(",")
+
+    if len(values) != 3:
+        raise ValueError("Three fields required")
+
+    part, quantity, material = values
+
+    if not part.startswith("PART-"):
+        raise ValueError("Part number is incorrect")
+
+    if not quantity.isdigit():
+        raise ValueError("Quantity is not an integer")
+
+    quantity = int(quantity)
+
+    if quantity <= 0:
+        raise ValueError("Quantity must be positive")
+
+    if not material.strip():
+        raise ValueError("Material is blank")
+
+    return {
+        "part": part,
+        "quantity": quantity,
+        "material": material.strip()
+    }
+
+
+data = [
+    "PART-201,40,Steel",
+    "PART-202,25,Iron",
+    "BAD-203,15,Copper",
+    "PART-204,-8,Wood",
+    "PART-205,abc,Plastic",
+    "PART-206,12,Aluminium",
+    "PART-207,0,Glass"
 ]
 
-rejects = []
-parts = []
+valid_data = []
+rejected_data = []
 
-
-def parse(line):
+for item in data:
     try:
-        code, dia = line.split(",")
-        dia = float(dia)
+        valid_data.append(validate(item))
 
-        if dia < 0:
-            raise ValueError("negative diameter")
+    except ValueError as error:
+        rejected_data.append({
+            "line": item,
+            "reason": str(error)
+        })
 
-        return code, dia
+# Calculate average safely
+total = sum(item["quantity"] for item in valid_data)
 
-    except ValueError as e:
-        rejects.append((line, str(e)))
-        return None
+average = total / len(valid_data) if valid_data else 0
 
+# Report
+print("\n========== PRODUCTION REPORT ==========")
 
-for line in hostile:
-    result = parse(line)
+print("Total input:", len(data))
+print("Successful:", len(valid_data))
+print("Rejected:", len(rejected_data))
+print("Total quantity:", total)
+print("Average quantity:", round(average, 2))
 
-    if result is not None:
-        parts.append(result)
+print("\nACCEPTED RECORDS")
 
+for item in valid_data:
+    print(item)
 
-# Guarded average
-if parts:
-    average = sum(dia for code, dia in parts) / len(parts)
-else:
-    average = 0
+print("\nREJECTS TABLE")
 
+print("{:<25} {}".format("BAD LINE", "REASON"))
 
-print("Report")
-print("Valid parts:", len(parts))
-print("Average diameter:", average)
-
-print("\nRejects")
-for line, reason in rejects:
-    print(f"{line!r} -> {reason}")
+for item in rejected_data:
+    print("{:<25} {}".format(
+        item["line"], item["reason"]
+    ))
