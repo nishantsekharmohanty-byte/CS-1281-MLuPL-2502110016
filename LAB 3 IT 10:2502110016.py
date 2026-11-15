@@ -1,18 +1,24 @@
+
 accept = 0
 rework = 0
 scrap = 0
 
 for i in range(10):
-    diameter = float(input(f"Enter diameter of item {i + 1}: "))
+    d = float(input("Enter diameter: "))
 
-    if 9.95 <= diameter <= 10.05:
+    if 9.5 <= d <= 10.5:
         print("ACCEPT")
-        accept += 1
-    elif 9.90 <= diameter < 9.95 or 10.05 < diameter <= 10.10:
+        accept = accept + 1
+
+    elif 9.0 <= d < 9.5 or 10.5 < d <= 11.0:
         print("REWORK")
-        rework += 1
+        rework = rework + 1
+
     else:
         print("SCRAP")
-        scrap += 1
+        scrap = scrap + 1
 
-print("Final Report: ACCEPT =", accept, ", REWORK =", rework, ", SCRAP =", scrap)
+print("\nFinal Inspection Report")
+print("Accepted parts:", accept)
+print("Rework parts:", rework)
+print("Scrap parts:", scrap)
