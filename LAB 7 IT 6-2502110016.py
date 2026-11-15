@@ -1,40 +1,42 @@
+
+# shoptools.py
+
 class Machine:
-    def __init__(self, name, limit):
+
+    def __init__(self, name, max_speed):
         self.name = name
-        self.limit = limit
+        self.max_speed = max_speed
         self.parts = 0
-        self.busy = False
+        self.jobs = 0
+        self.free = True
 
-    def process(self, speed):
-        if speed <= self.limit:
-            self.parts += 1
-            self.busy = True
-            return True
-        return False
+    # Process an assigned job
+    def operate(self, speed, quantity):
 
+        if not self.free:
+            return False
 
-machines = [
-    Machine("Lathe", 100),
-    Machine("Drill", 80),
-    Machine("Mill", 120)
-]
+        if speed < 500 or speed > self.max_speed:
+            return False
 
-jobs = [50, 70, 90, 60, 110, 40, 100, 75, 115, 55]
+        if quantity <= 0:
+            return False
 
-for speed in jobs:
-    machine = next((m for m in machines if not m.busy), None)
+        self.free = False
 
-    if machine:
-        machine.process(speed)
+        self.parts += quantity
+        self.jobs += 1
 
-    for m in machines:
-        m.busy = False
+        self.free = True
 
-busiest = max(machines, key=lambda m: m.parts)
+        return True
 
-print("Plant Report")
-for m in machines:
-    print(m.name, ":", m.parts, "parts")
+    # Return machine status
+    def status(self):
+        return {
+            "Machine": self.name,
+            "Parts": self.parts,
+            "Jobs": self.jobs,
+            "Free": self.free
+        }
 
-print("Plant total:", sum(m.parts for m in machines))
-print("Busiest machine:", busiest.name)
