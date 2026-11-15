@@ -1,57 +1,53 @@
-# IT12 Rough cut · Three Jigs warm-up
 
-# 1. inspect(dia) → bin label
+# IT12 - Version 2
+
+# Function 1: Classify diameter
 def inspect(dia):
-    if dia < 10:
+    if dia >= 10 and dia < 20:
         return "Small"
-    elif dia < 20:
+    elif dia >= 20 and dia < 30:
         return "Medium"
-    else:
+    elif dia >= 30 and dia <= 40:
         return "Large"
+    else:
+        return "Out of Spec"
 
 
-# Test inspect()
-print("inspect tests:")
-print(inspect(5))
-print(inspect(15))
-print(inspect(25))
-
-
-# 2. tally(labels) → count dictionary
+# Function 2: Calculate category counts
 def tally(labels):
-    counts = {}
-    for label in labels:
-        if label in counts:
-            counts[label] += 1
-        else:
-            counts[label] = 1
-    return counts
+    result = {}
+
+    for item in set(labels):
+        result[item] = labels.count(item)
+
+    return result
 
 
-# Test tally()
-print("\ntally test:")
-print(tally(["Small", "Medium", "Small", "Large", "Medium"]))
-
-
-# 3. report(shift, counts) → formatted line
+# Function 3: Prepare shift report
 def report(shift, counts):
-    return f"Shift {shift}: {counts}"
+    total = 0
+
+    for value in counts.values():
+        total += value
+
+    return f"{shift} Shift: {total} parts produced - {counts}"
 
 
-# Test report()
-print("\nreport test:")
-print(report("A", {"Small": 2, "Medium": 2, "Large": 1}))
+# Independent testing
+if __name__ == "__main__":
 
+    print("Inspection Results:")
+    print(inspect(12))
+    print(inspect(24))
+    print(inspect(36))
+    print(inspect(50))
 
-# 4. Combine everything
-print("\nCombined test:")
+    print("\nCategory Counts:")
+    data = ["Small", "Large", "Medium",
+            "Small", "Large", "Small"]
 
-diameters = [5, 12, 8, 22, 15, 25]
+    summary = tally(data)
+    print(summary)
 
-labels = []
-for dia in diameters:
-    labels.append(inspect(dia))
-
-counts = tally(labels)
-
-print(report("A", counts))
+    print("\nShift Report:")
+    print(report("B", summary))
