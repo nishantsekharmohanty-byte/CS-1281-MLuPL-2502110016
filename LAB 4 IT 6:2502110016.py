@@ -1,28 +1,33 @@
 import random
 
-consecutive_accepts = 0
-attempts = 0
-max_attempts = 500
+count = 0
+consecutive = 0
+limit = 500
 
-while consecutive_accepts < 5 and attempts < max_attempts:
-    diameter = random.uniform(24.90, 25.10)
-    attempts += 1
+while count < limit and consecutive < 5:
 
-    if 24.95 <= diameter <= 25.05:
-        result = "ACCEPT"
-        consecutive_accepts += 1
+    d = round(random.uniform(24.90, 25.10), 2)
+    count += 1
+
+    print("Part", count, "Diameter:", d)
+
+    if 24.95 <= d <= 25.05:
+        print("ACCEPT")
+        consecutive += 1
+
+    elif 24.90 <= d < 24.95 or 25.05 < d <= 25.10:
+        print("REWORK")
+        consecutive = 0
+
     else:
-        result = "REWORK"
-        consecutive_accepts = 0
+        print("SCRAP")
+        consecutive = 0
 
-    print(f"Part {attempts}: {diameter:.2f} -> {result} | Consecutive ACCEPTs: {consecutive_accepts}")
+print("\nFINAL REPORT")
+print("Total parts inspected:", count)
+print("Consecutive ACCEPT:", consecutive)
 
-if consecutive_accepts == 5:
-    print("\nSUCCESS: Five consecutive ACCEPTs achieved.")
-    print(f"Parts required: {attempts}")
+if consecutive == 5:
+    print("TARGET ACHIEVED!")
 else:
-    print("\nSAFETY STOP: Maximum attempts reached.")
-    print(f"Parts inspected: {attempts}")
-
-print("\nRECORD:")
-print("An industrial program uses a safety cap so that an unexpected condition, faulty sensor, bad input, or endless process cannot make the machine run indefinitely.")
+    print("SAFETY LIMIT REACHED!")
