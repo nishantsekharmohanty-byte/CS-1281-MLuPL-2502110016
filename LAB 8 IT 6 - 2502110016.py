@@ -1,42 +1,69 @@
-def parse(line):
-    try:
-        code, dia = line.split(",")
-        dia = float(dia)
+# Self-testing parser
 
-        if not code.startswith("P"):
-            raise ValueError("invalid part code")
+def parser(line):
 
-        if dia < 0 or dia > 100:
-            raise ValueError("diameter out of range")
+    fields = line.split(",")
 
-        return code, dia
+    if len(fields) != 3:
+        raise ValueError("Wrong field count")
 
-    except ValueError:
-        return None
+    code, qty, material = fields
+
+    if not code.startswith("PART-"):
+        raise ValueError("Invalid code")
+
+    if not qty.isdigit():
+        raise ValueError("Quantity must be numeric")
+
+    if int(qty) <= 0:
+        raise ValueError("Quantity must be positive")
+
+    if not material.strip():
+        raise ValueError("Material missing")
+
+    return True
 
 
 def run_tests():
-    hostile = [
-        "",
-        "ABC",
-        "12,",
-        ",25",
-        "12,25,30",
-        "abc,25",
-        "P101,-5",
-        "P101,999999"
+
+    tests = [
+        ("", False),
+        ("PART-301,10,Steel", True),
+        ("BAD-302,20,Iron", False),
+        ("PART-303,-5,Wood", False),
+        ("PART-304,abc,Copper", False),
+        ("PART-305,0,Glass", False),
+        ("PART-306,15", False),
+        ("PART-307,20,", False)
     ]
 
-    print("PASS/FAIL TABLE")
-    print("-------------------------------")
+    success = 0
+    failure = 0
 
-    for i, line in enumerate(hostile, 1):
-        result = parse(line)
+    print("\nSELF TESTING REPORT")
+    print("------------------------------")
 
-        if result is None:
-            print(f"Test {i}: PASS - rejected {line!r}")
+    for index, (line, expected) in enumerate(tests, 1):
+
+        try:
+            parser(line)
+            actual = True
+
+        except (ValueError, TypeError):
+            actual = False
+
+        if actual == expected:
+            print("Test", index, ": PASS")
+            success += 1
+
         else:
-            print(f"Test {i}: FAIL - accepted {line!r}")
+            print("Test", index, ": FAIL")
+            failure += 1
+
+    print("------------------------------")
+    print("Passed:", success)
+    print("Failed:", failure)
+    print("Total:", len(tests))
 
 
 run_tests()
