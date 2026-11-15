@@ -1,43 +1,45 @@
-
 import os
 
-# Create the data folder if it doesn't exist
-os.makedirs("data", exist_ok=True)
+folder = "data"
 
-# Create test records, including three deliberately faulty ones
-records = [
-    "WO01 | Machine A | Normal operation",
-    "WO02 | Machine B | Completed successfully",
-    "WO03 | Machine C | Temperature stable",
-    "WO04 | Machine D | Maintenance completed",
-    "WO05 | Machine A | No issues reported",
-    "WO06 | Machine B | Oil level checked",
-    "WO07 | Machine C | Running normally",
+os.makedirs(folder, exist_ok=True)
 
-    # Three deliberately filthy records
-    "WO08 | Machine X | ERROR: Temperature = -9999",
-    "WO08 | ??? | NULL | !!! | BROKEN DATA",
-    "WO08 | Machine Z | Pressure = HIGHHIGHHIGH",
-
-    "WO09 | Machine D | Inspection passed",
-    "WO10 | Machine A | Operating normally",
-    "WO11 | Machine B | Filter replaced",
-    "WO12 | Machine C | Maintenance required",
-    "WO13 | Machine D | Shift completed"
+shift_records = [
+    "PART-201,12,Steel",
+    "PART-202,18,Iron",
+    "PART-203,25,Copper",
+    "PART-204,30,Wood",
+    "PART-205,15,Plastic",
+    "PART-206,22,Glass",
+    "PART-207,10,Aluminium",
+    "PART-208,35,Steel",
+    "PART-209,16,Iron",
+    "PART-210,20,Copper",
+    "PART-211,-10,Wood",
+    "INVALID,25,Plastic",
+    "PART-213,abc,Glass",
+    "PART-214,40,Steel",
+    "PART-215,28,Aluminium"
 ]
 
-# Write records to the file
-with open("data/shift_log.txt", "w") as file:
-    for record in records:
-        file.write(record + "\n")
+path = os.path.join(folder, "shift_log.txt")
 
-# Read the file back
-with open("data/shift_log.txt", "r") as file:
-    lines = file.readlines()
+# Write records
+with open(path, "w") as log:
 
-# Print the records and line count
-print("SHIFT LOG:")
-for line in lines:
-    print(line.strip())
+    for record in shift_records:
+        log.write(record + "\n")
 
-print("\nTotal line count:", len(lines))
+print("Shift log generated!")
+
+# Read records
+with open(path, "r") as log:
+
+    content = log.readlines()
+
+print("\nSHIFT LOG CONTENT")
+
+for index, record in enumerate(content, 1):
+    print(index, record.strip())
+
+print("\nTotal records:", len(content))
