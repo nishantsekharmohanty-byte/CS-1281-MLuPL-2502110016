@@ -1,41 +1,43 @@
 import random
 
-mode = input("Enter mode (halt/skip): ").lower()
+mode = input("Enter mode (HALT/SKIP): ").upper()
 
 accept = 0
 rework = 0
 scrap = 0
 inspected = 0
 
-for i in range(100):
-    diameter = random.uniform(24.90, 25.10)
+for i in range(10):
+    d = round(random.uniform(24.90, 25.10), 2)
     inspected += 1
 
-    if 24.95 <= diameter <= 25.05:
-        bin = "ACCEPT"
+    print("\nDiameter:", d)
+
+    if 24.95 <= d <= 25.05:
+        print("ACCEPT")
         accept += 1
 
-    elif 24.90 <= diameter < 24.95 or 25.05 < diameter <= 25.10:
-        bin = "REWORK"
+    elif 24.90 <= d < 24.95 or 25.05 < d <= 25.10:
+        print("REWORK")
         rework += 1
 
     else:
-        bin = "SCRAP"
+        print("SCRAP")
         scrap += 1
-        print(f"Diameter: {diameter:.2f} -> SCRAP")
 
-        if mode == "halt":
-            print("HALT MODE: Scrap detected. Batch stopped.")
+        if mode == "HALT":
+            print("Batch stopped!")
             break
-        elif mode == "skip":
-            print("SKIP MODE: Scrap logged. Continuing batch.")
+
+        elif mode == "SKIP":
             continue
 
-    print(f"Diameter: {diameter:.2f} -> {bin}")
+        else:
+            print("Invalid mode!")
+            break
 
-print("\n--- SHIFT REPORT ---")
-print(f"Mode: {mode.upper()}")
-print(f"Inspected: {inspected}")
-print(f"ACCEPT: {accept}")
-print(f"REWORK: {rework}")
-print(f"SCRAP: {scrap}")
+print("\nFINAL REPORT")
+print("Inspected:", inspected)
+print("Accepted:", accept)
+print("Rework:", rework)
+print("Scrap:", scrap)
